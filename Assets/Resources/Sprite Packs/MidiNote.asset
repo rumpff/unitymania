@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ed114d81f5135347ad521abee6d4563, type: 3}
+  m_Name: MidiNote
+  m_EditorClassIdentifier: 
+  packName: MidiNote
+  receptor: {fileID: 21300000, guid: 2ab017426b62d9942b5a3a590f206822, type: 3}
+  note: {fileID: 21300000, guid: 79d52af40b7469746960d57149295c72, type: 3}
+  holdTop:
+  - {fileID: 21300000, guid: cfbc372094818ef42b228f627074a5f4, type: 3}
+  - {fileID: 21300000, guid: 453f8962146c1de418a3bdce204560d5, type: 3}
+  holdCenter:
+  - {fileID: 21300000, guid: c1c1893b0b8f31c459806e2bbeedb6d1, type: 3}
+  - {fileID: 21300000, guid: 45160f8ce3db4dd478428018110e360f, type: 3}
+  holdBottom:
+  - {fileID: 21300000, guid: a76d364736a488142a06e59f04cc90b2, type: 3}
+  - {fileID: 21300000, guid: 9faa00a8c3b24134a98d18a89ba5502f, type: 3}

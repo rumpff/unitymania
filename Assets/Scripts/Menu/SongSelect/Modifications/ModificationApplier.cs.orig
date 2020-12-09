@@ -1,0 +1,156 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.PostProcessing;
+
+public class ModificationApplier : MonoBehaviour
+{
+<<<<<<< HEAD
+    [SerializeField] private AudioMixer m_musicMixer;
+    [SerializeField] private AudioMixer m_soundEffectMixer;
+    [SerializeField] private PostProcessingProfile m_postProcessing;
+=======
+    [SerializeField] private AudioMixer m_mainMixer;
+>>>>>>> 76a60052b6856f61082ce61d420b21adaf3866ed
+
+    [Space(15)]
+
+    [SerializeField] private ModifierObject obj_musicVolume;
+    [SerializeField] private ModifierObject obj_sfxVolume;
+    [SerializeField] private ModifierObject obj_musicPitch;
+    [SerializeField] private ModifierObject obj_scrollSpeed;
+    [SerializeField] private ModifierObject obj_screenShake;
+    [SerializeField] private ModifierObject obj_fontType;
+<<<<<<< HEAD
+    [SerializeField] private ModifierObject obj_postProcessing;
+=======
+    [SerializeField] private ModifierObject obj_vSync;
+    [SerializeField] private ModifierObject obj_pitchComp;
+>>>>>>> 76a60052b6856f61082ce61d420b21adaf3866ed
+
+    [Space(5)]
+
+    [SerializeField] private ModifierObject obj_keyStart;
+    [SerializeField] private ModifierObject obj_keyExit;
+    [SerializeField] private ModifierObject obj_keyLeft;
+    [SerializeField] private ModifierObject obj_keyRight;
+    [SerializeField] private ModifierObject obj_keyUp;
+    [SerializeField] private ModifierObject obj_keyDown;
+
+
+    private float m_postProcessingMultiplier;
+
+    private void Start()
+    {
+        // Give base values
+        obj_musicVolume.SetValue(Modifications.MusicVolume);
+        obj_sfxVolume.SetValue(Modifications.SFXVolume);
+        obj_musicPitch.SetValue(Modifications.MusicPitch);
+        obj_scrollSpeed.SetValue(Modifications.ScrollSpeed);
+        obj_screenShake.SetValue(Modifications.ScreenshakeIntensity);
+        obj_fontType.SetValue((int)Modifications.FontType);
+<<<<<<< HEAD
+        obj_postProcessing.SetValue((int)Modifications.PostProcessing);
+=======
+        obj_vSync.SetValue(Modifications.VSync);
+        obj_pitchComp.SetValue(Modifications.PitchCompensation);
+>>>>>>> 76a60052b6856f61082ce61d420b21adaf3866ed
+
+        obj_keyStart.SetValue((int)Modifications.CustomKeys[KeyTypes.StartKey]);
+        obj_keyExit.SetValue((int)Modifications.CustomKeys[KeyTypes.ExitKey]);
+        obj_keyLeft.SetValue((int)Modifications.CustomKeys[KeyTypes.LeftKey]);
+        obj_keyRight.SetValue((int)Modifications.CustomKeys[KeyTypes.RightKey]);
+        obj_keyUp.SetValue((int)Modifications.CustomKeys[KeyTypes.UpKey]);
+        obj_keyDown.SetValue((int)Modifications.CustomKeys[KeyTypes.DownKey]);
+
+    }
+
+    void Update ()
+    {
+        // Apply all values
+        Modifications.MusicVolume = (int)obj_musicVolume.GetValue();      
+        Modifications.SFXVolume = (int)obj_sfxVolume.GetValue();
+        Modifications.MusicPitch = (int)obj_musicPitch.GetValue();
+        Modifications.ScrollSpeed = (int)obj_scrollSpeed.GetValue();
+        Modifications.ScreenshakeIntensity = (int)obj_screenShake.GetValue();
+        Modifications.FontType = (FontType)obj_fontType.GetValue();
+<<<<<<< HEAD
+        Modifications.PostProcessing = (int)obj_postProcessing.GetValue();
+=======
+        Modifications.VSync = (int)obj_vSync.GetValue();
+        Modifications.PitchCompensation = (int)obj_pitchComp.GetValue();
+>>>>>>> 76a60052b6856f61082ce61d420b21adaf3866ed
+
+        Modifications.CustomKeys[KeyTypes.StartKey] = (KeyCode)obj_keyStart.GetValue();
+        Modifications.CustomKeys[KeyTypes.ExitKey] = (KeyCode)obj_keyExit.GetValue();
+        Modifications.CustomKeys[KeyTypes.LeftKey] = (KeyCode)obj_keyLeft.GetValue();
+        Modifications.CustomKeys[KeyTypes.RightKey] = (KeyCode)obj_keyRight.GetValue();
+        Modifications.CustomKeys[KeyTypes.UpKey] = (KeyCode)obj_keyUp.GetValue();
+        Modifications.CustomKeys[KeyTypes.DownKey] = (KeyCode)obj_keyDown.GetValue();
+
+        // Some values need direct applying as well
+        float musicVolume = Mathf.Clamp((float)Modifications.MusicVolume / 100, 0.001f, Modifications.MusicVolume);
+        m_mainMixer.SetFloat("musicVolume", Mathf.Log(musicVolume) * 20);
+
+        float sfxVolume = Mathf.Clamp((float)Modifications.SFXVolume / 100, 0.001f, Modifications.SFXVolume);
+        m_mainMixer.SetFloat("sfxVolume", Mathf.Log(sfxVolume) * 20);
+
+        float currentPitch;
+<<<<<<< HEAD
+        m_musicMixer.GetFloat("pitch", out currentPitch);
+        m_musicMixer.SetFloat("pitch", Mathf.Lerp(currentPitch, (float)Modifications.MusicPitch / 100, 11 * Time.deltaTime));
+
+        PostProcessingProfile profile = m_postProcessing;
+
+        BloomModel.Settings bloom = profile.bloom.settings;
+        ColorGradingModel.Settings colorGrading = profile.colorGrading.settings;
+        ChromaticAberrationModel.Settings chromaticAbberation = profile.chromaticAberration.settings;
+        GrainModel.Settings grain = profile.grain.settings;
+        VignetteModel.Settings vignette = profile.vignette.settings;
+
+        float ppDest;
+        if(Modifications.PostProcessing == 0)
+        {
+            ppDest = 0;
+        }
+        else
+        {
+            ppDest = 0.5f;
+
+            for (int i = 0; i < Modifications.PostProcessing-1; i++)
+            {
+                ppDest *= 2;
+            }
+        }
+
+        m_postProcessingMultiplier = Mathf.Lerp(m_postProcessingMultiplier, ppDest, 6 * Time.deltaTime);
+
+        Debug.Log("pp" + m_postProcessingMultiplier);
+
+        bloom.bloom.intensity = 1.0f * (m_postProcessingMultiplier);
+        colorGrading.basic.postExposure = 0.7f * (m_postProcessingMultiplier);
+        chromaticAbberation.intensity = 0.5f * (m_postProcessingMultiplier);
+        grain.intensity = 1f * (m_postProcessingMultiplier);
+        vignette.intensity = Mathf.Clamp(0.4f * (m_postProcessingMultiplier), 0, 0.44f);
+
+        m_postProcessing.bloom.settings = bloom;
+        m_postProcessing.chromaticAberration.settings = chromaticAbberation;
+        m_postProcessing.chromaticAberration.settings = chromaticAbberation;
+        m_postProcessing.grain.settings = grain;
+        m_postProcessing.vignette.settings = vignette;
+=======
+        m_mainMixer.GetFloat("musicPitch", out currentPitch);
+        m_mainMixer.SetFloat("musicPitch", Mathf.Lerp(currentPitch, Modifications.MusicPitch / 100.0f, 11 * Time.deltaTime));
+
+        float pitchCompDest, currentPitchComp;
+
+        m_mainMixer.GetFloat("musicPitchShifter", out currentPitchComp);
+        pitchCompDest = (Modifications.PitchCompensation == 1) ? 1 / (Modifications.MusicPitch / 100.0f) : 1;
+
+        m_mainMixer.SetFloat("musicPitchShifter", Mathf.Lerp(currentPitchComp, pitchCompDest, 11 * Time.deltaTime));
+
+        QualitySettings.vSyncCount = Modifications.VSync;
+>>>>>>> 76a60052b6856f61082ce61d420b21adaf3866ed
+    }
+}
